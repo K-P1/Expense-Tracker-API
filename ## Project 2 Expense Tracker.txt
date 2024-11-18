@@ -1,0 +1,35 @@
+## **Project 2: Expense Tracker**
+
+### Step-by-Step Guide:
+
+1. **Setup the Project:**
+   - Initialize a new Django or FastAPI project.
+   - Configure the database (start with SQLite).
+
+2. **Design the Database:**
+   - Create models for:
+     - **Income** (fields: amount, date, description).
+     - **Expense** (fields: amount, category, date, description).
+     - **Category** (fields: name, description, if needed).
+
+3. **Build the Backend Logic:**
+   - Implement CRUD operations for:
+     - Income records.
+     - Expense records.
+     - Categories.
+
+4. **Create User Interface or API Endpoints:**
+   - **Django:** Use templates to display forms for adding/viewing income and expenses.
+   - **FastAPI:** Create REST API endpoints to handle data operations (use Swagger UI for testing).
+
+5. **Add Summary and Reports:**
+   - Calculate total income, expenses, and balance (income - expenses).
+   - Optionally, group expenses by category and create summaries.
+
+6. **Test the Application:**
+   - Test each feature (adding, editing, deleting records).
+   - Validate the summary calculations.
+
+7. **Optional Enhancements:**
+   - Add a date filter for income/expense tracking over time.
+   - Create basic visualizations (like pie or bar charts) for expense categories.
