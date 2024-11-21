@@ -1,10 +1,11 @@
+#CRUD.PY
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from models import *
-from schemas import *
+from models import Income, Expense, Category
+from schemas import WriteIncome, WriteExpense, WriteCategory, Report
 
 def create_income(db: Session, income: WriteIncome):
-    db_income = Income(**income.model_dump())
+    db_income = Income(**income.model_dump(exclude_unset=True))
     db.add(db_income)
     db.commit()
     db.refresh(db_income)
@@ -32,7 +33,7 @@ def get_income(db: Session, income_id: int):
     return db.query(Income).filter(Income.id == income_id).first()
 
 def create_expense(db: Session, expense: WriteExpense):
-    db_expense = Expense(**expense.model_dump())
+    db_expense = Expense(**expense.model_dump(exclude_unset=True))
     db.add(db_expense)
     db.commit()
     db.refresh(db_expense)
@@ -60,14 +61,14 @@ def get_expense(db: Session, expense_id: int):
     return db.query(Expense).filter(Expense.id == expense_id).first()
 
 def create_category(db: Session, category: WriteCategory):
-    db_category = Category(**category.model_dump())
+    db_category = Category(**category.model_dump(exclude_unset=True))
     db.add(db_category)
     db.commit()
     db.refresh(db_category)
     return db_category
 
-def update_category(db: Session, category_id: int, category: WriteCategory):
-    db_category = db.query(Category).filter(Category.id == category_id).first()
+def update_category(db: Session, category_name: str, category: WriteCategory):
+    db_category = db.query(Category).filter(Category.name == category_name).first()
     if db_category is None:
         raise ValueError("Category not found")
     for key, value in category.model_dump(exclude_unset=True).items():
@@ -76,13 +77,25 @@ def update_category(db: Session, category_id: int, category: WriteCategory):
     db.refresh(db_category)
     return db_category
 
-def delete_category(db: Session, category_id: int):
-    db_category = db.query(Category).filter(Category.id == category_id).first()
+def delete_category(db: Session, category_name: str):
+    db_category = db.query(Category).filter(Category.name == category_name).first()
     if db_category is None:
         raise ValueError("Category not found")
     db.delete(db_category)
     db.commit()
     return db_category
+
+def get_category(db: Session, category_name: str):
+    return db.query(Category).filter(Category.name == category_name).first()
+
+def get_categories(db: Session):
+    return db.query(Category).all()
+
+def get_incomes(db: Session):
+    return db.query(Income).all()
+
+def get_expenses(db: Session):
+    return db.query(Expense).all()
 
 def calculate_income(db: Session, start_date, end_date):
     total_credit = db.query(func.sum(Income.amount)).filter(
@@ -122,13 +135,3 @@ def report_summary(db: Session, report: Report):
         "start_balance": start_balance,
         "end_balance": end_balance
     }
-
-    income_instances = db.query(Income.amount).filter(
-        Income.date_time <= date
-    ).all()
-    expense_instances = db.query(Expense.amount).filter(
-        Expense.date_time <= date
-    ).all()
-    total_credit = [income.amount for income in income_instances]
-    total_debit = [expense.amount for expense in expense_instances]
-    return sum(total_credit) - sum(total_debit)
