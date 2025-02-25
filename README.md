@@ -38,10 +38,10 @@ Expense Tracker API/
 For detailed instructions on setting up, running, and testing each version, please refer to the README files in the respective subfolders:
 
 - **Django Version:**  
-  Navigate to the `Django/` folder and open the [README.md](./Django/README.md) file.
+  Navigate to the `Django/` folder and open the [README.md](Django/README.md) file.
 
 - **FastAPI Version:**  
-  Navigate to the `FastAPI/` folder and open the [README.md](./FastAPI/README.md) file.
+  Navigate to the `FastAPI/` folder and open the [README.md](FastAPI/README.md) file.
 
 ## Contributing
 
